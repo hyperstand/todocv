@@ -17,8 +17,12 @@ class CreateTodoTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('code');
+
+            // $table->string('user_id_hide');
+            
             $table->boolean('hide');
             $table->timestamps();
+            // $table->foreign('todo_id')->references('id')->on('todo');
         });
     }
 

@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('/lists/all',['uses' => 'listsController@get_all','nocsrf' => true]);
+Route::post('/lists/{id}',['uses' => 'listsController@get_data','nocsrf' => true]);
+

@@ -16,7 +16,8 @@ class CreateTodocontentTable extends Migration
         Schema::create('todocontent', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('todo_id')->unsigned()->index()->nullable();
-            $table->boolean('value');
+            $table->string('value');
+            $table->boolean('finish');
             $table->timestamps();
             $table->foreign('todo_id')->references('id')->on('todo');
         });

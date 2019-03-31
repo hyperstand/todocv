@@ -1,0 +1,29 @@
+
+<div ng-show="isAvail">
+
+<div>
+    <button>private</button>
+    <button ng-click="remove([[todo.url]])">trash</button>
+</div>
+
+<div>
+<p>[[todo.name]] <span>[[todo.contentsize]]</span></p>
+
+<span>Add Here</span>
+
+
+
+<ul>
+    <li>
+        <input type="checkbox" name="" id="">
+        <input type="text" value="">
+        <button>Trash</button>
+    </li>
+</ul>
+
+
+</div>
+</div>
+<div ng-show="isAvail==false">
+    <p>page not found</p>
+</div>

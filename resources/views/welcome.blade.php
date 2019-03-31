@@ -31,15 +31,13 @@
                  <a ng-click="createtodo()">+ New List</a>
              </li>
              <span ng-repeat="data in lists">
-             <li class="list">
-                    <a>[[data]]</a>
-             </li>
+                <li class="list">
+                        <a ng-href="#!/lists/[[data.url]]">[[data.name]]</a>
+                        <p>[[data.contentsize]]</p>
+                </li>
             </span>
          </ul>
          {{-- list --}}
-
-
-
 
     </div>
     
