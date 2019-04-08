@@ -1,5 +1,5 @@
 
-var app = angular.module('myApp', ['ui.router'],function($interpolateProvider) {
+var app = angular.module('myApp', ["ngRoute"],function($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
 });
@@ -51,25 +51,35 @@ app.service('listService', function($http) {
                 });
     }
 
+    this.get_first=()=>{
+        var url='/lists/'
+        $http({
+            method: 'POST',
+            url: './lists/getfirst'
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            });
+    }
 
     //create new todo
     this.set=(name,array)=>{
-
-
-        function makeid(length) {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-          
-            for (var i = 0; i < length; i++)
-              text += possible.charAt(Math.floor(Math.random() * possible.length));
-          
-            return text;
-          }
-
         var json={}
-        json.title=name
-        json.code=makeid(10)
-        this.content.push(new this.list(json,array))
+
+        $http({
+            method: 'POST',
+            url: './lists/create'
+        }).then(function successCallback(response) {
+            json.title=name
+            json.code=makeid(10)
+            this.content.push(new this.list(json,array))
+            }, function errorCallback(response) {
+
+            });
+
         
     }
     // get all todo info
@@ -106,60 +116,11 @@ app.service('listService', function($http) {
        
     }
 });
-app.run(($rootScope)=>{
-    $rootScope.logstat=false;
-})
+
 // app.constant("CSRF_TOKEN", '{{ csrf_token()}}'); 
-app.config(($stateProvider)=>{
-    $stateProvider
-    .state('list', {
-        url: '/lists/:listcode',
-        name:'lists',
-        controller: function($scope, $stateParams,listService) {
-            // get the id
-            $scope.isAvail=false 
-            $scope.todo=listService.getindividual($stateParams.listcode);
-            if($scope.todo != false)
-            {
-                $scope.isAvail=true;
-            }
-            
-            $scope.remove=(code)=>{
-                listService.remove(code)
-            }
-            
-            // $scope.todoname=listService.
-        },
-        templateUrl:'./template/todo.template.html'
-    })
-    .state('login', {
-        url: '/login',
-        name:'login',
-        controller: function($scope) {
-
-        },
-        templateUrl:'./template/login.template.html'
-    })
-    .state('register', {
-        url: '/register',
-        name:'register',
-        controller: function($scope) {
-
-        },
-        templateUrl:'./template/register.template.html'
-    })
-    .state('forgetpass', {
-        url: '/reset',
-        name:'reset',
-        controller: function($scope) {
-
-        },
-        templateUrl:'./template/reset.template.html'
-    });
-})
 
 //Main Controller
-app.controller('mainController',($scope,$rootScope,listService,$state)=>{
+app.controller('mainController',($scope,$rootScope,listService)=>{
 
     //Get all List
     listService.initialize();
@@ -167,15 +128,8 @@ app.controller('mainController',($scope,$rootScope,listService,$state)=>{
     //create new Class to Store Todo
     $scope.lists=listService.getall();
 
-    //direct to page
-    $scope.goto=(r)=>{
-        $state.go(r);   
-    }
 
-    //check if logged in
-    $scope.loggedin=()=>{
-        return $rootScope.logstat;
-    };
+
 
     //Adding new todo object
     $scope.createtodo=()=>{

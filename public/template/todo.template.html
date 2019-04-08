@@ -1,29 +1,16 @@
+<div class="main_box" ng-show="isAvail" >
+    
+    <div class="top-right">
+        <input type="text" ng-value="data.title">
+        <span>[[data.size]]</span>
+    </div>
 
-<div ng-show="isAvail">
+    <div class="top-left">
+        <button ng-click="hide()" >private</button>
+        <button ng-click="delete()">trash</button>
+    </div>
+</div> 
 
-<div>
-    <button>private</button>
-    <button ng-click="remove([[todo.url]])">trash</button>
-</div>
-
-<div>
-<p>[[todo.name]] <span>[[todo.contentsize]]</span></p>
-
-<span>Add Here</span>
-
-
-
-<ul>
-    <li>
-        <input type="checkbox" name="" id="">
-        <input type="text" value="">
-        <button>Trash</button>
-    </li>
-</ul>
-
-
-</div>
-</div>
-<div ng-show="isAvail==false">
-    <p>page not found</p>
+<div class="main_box" ng-hide="isAvail">
+    
 </div>

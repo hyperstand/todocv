@@ -11,9 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::post('/lists/all',['uses' => 'listsController@get_all','nocsrf' => true]);
-Route::post('/lists/{id}',['uses' => 'listsController@get_data','nocsrf' => true]);
+Route::get('/',['uses' => 'mainController@main_view','name'=>'index']);
+Route::get('/login',['uses' => 'mainController@login_view','name'=>'login']);
+Route::get('/register',['uses' => 'mainController@register_view','name'=>'register']);
+
+
+//api
+Route::post('/lists/all',['uses' => 'listsController@get_all','no_csrf_check' => true]);
+Route::post('/lists/create',['uses' => 'listsController@add_todo','no_csrf_check' => true]);
+Route::post('/lists/getfirst',['uses' => 'listsController@get_first','no_csrf_check' => true]);
+Route::post('/lists/{id}',['uses' => 'listsController@get_data','no_csrf_check' => true]);
+
+
+
+
 
