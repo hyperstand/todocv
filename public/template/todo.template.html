@@ -1,16 +1,51 @@
-<div class="main_box" ng-show="isAvail" >
+<style>
+.finished
+{
+   border:1px solid red; 
+}
+</style>
+
+
+
+<div class="main_box" ng-if="isAvail == true" ng-hide="isload">
     
     <div class="top-right">
-        <input type="text" ng-value="data.title">
+        <input type="text" ng-model="data.title" ng-blur="update()">
         <span>[[data.size]]</span>
     </div>
+
+
+    <form ng-submit="insert_content()">
+        <input type="text" ng-model="data.task_value">
+    </form>
 
     <div class="top-left">
         <button ng-click="hide()" >private</button>
         <button ng-click="delete()">trash</button>
     </div>
+    
+    <div ng-show="data.content.length >0">
+        <ul  ng-repeat="data in data.content"  >
+            <li>[[data]]
+            <input ng-class="{'finished': data.task_stat }" type="text" ng-model="data.task_value"
+                ng-blur="data.update_task_name(data.task_value,data.task_code)">
+             <input type="checkbox" ng-checked="data.task_stat" ng-model="data.task_stat" ng-click="data.checktoggletask(data.task_stat,data.task_code,'{{data.task_stat}}')">   
+            <button ng-click="data.deletetask(data.task_code)">Trash</button>
+            </li>
+        </ul>
+    </div>
+
+    <div ng-if="data.content.length < 1 " ng-show="isAvail">
+        <h3>lorem</h3>
+        <h3>lorem</h3>
+    </div>
 </div> 
 
-<div class="main_box" ng-hide="isAvail">
-    
+
+<div class="main_box" ng-if="isAvail == false" ng-hide="isload">
+    <h2>Content Not available</h2>
+</div>
+
+<div class="main_box" ng-show="isload" >
+    <h2>Loading Content</h2>
 </div>

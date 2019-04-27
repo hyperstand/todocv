@@ -1,139 +1,201 @@
 
+//Dev
+// Try Function alter class
+// remove function
+// return this content
+// main.js remove
+
+
 var app = angular.module('myApp', ["ngRoute"],function($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
 });
+// app.constant("CSRF_TOKEN", '{{ csrf_token()}}'); 
+app.run(($rootScope)=>{
+    $rootScope.lists=[];
+})
+app.service('listService', function($http,$rootScope,$location) {
 
-app.service('listService', function($http) {
-
-    this.list=class{
-        constructor(data,v) {
-            this.content=v;
-            this.title = data.title
-            this.url_code=data.code
-        }
-
-        get name()
-        {
-            return this.title
-        }
-
-        get url()
-        {
-            return this.url_code
-        }
-    
-        get contentsize()
-        {   
-    
-            return this.content.length
-        }
-        addto_list(a)
-        {
-            this.content.push(a)
-        }
+    //with function as template
+    function list(data){
+        this.title=data.title
+        this.url_code=data.code
+        this.content_size=data.content_size
     }
-
-        //list of todo
-        this.content=new Array();
     
 
     this.initialize=()=>{
+
+
             $http({
                 method: 'POST',
-                url: './lists/all'
+                url: './lists/get/all'
             }).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-                }, function errorCallback(response) {
+
+              response.data.forEach((currentValue, index, arr)=>{
+
+                var json={}
+                json.title=currentValue.name
+                json.code=currentValue.code
+                json.content_size=currentValue.task_count
+
+            
+                var f=new list(json)
+                // console.log(f)
+                $rootScope.lists.push(f)
+
+                // try {
+                //     // New keyword to access constructor
+                //     var bookConstructed = new this.list(json,currentValue.mytodo_count)
+                //     console.log(bookConstructed)           
+                // } catch (e) {
+                //     if (e instanceof TypeError) {
+                //         console.log(e, true);
+                //     } else {
+                //         console.log(e, false);
+                //     }
+                // }
+                // this.content.push(new this.list(json,currentValue.mytodo_count))
+              })
+               
+            }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
-                });
+                
+            });
+
+            
     }
 
+    //get first todo code if empty or deleted
     this.get_first=()=>{
-        var url='/lists/'
+
+    function get_from_server(){
         $http({
             method: 'POST',
             url: './lists/getfirst'
         }).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
+
+            
+            $location.path('/lists/'+response.data.data.code);
+
             }, function errorCallback(response) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
+
             });
     }
 
+    get_from_server();
+
+    // if(){
+            
+    // }
+
+        
+    }
+
     //create new todo
-    this.set=(name,array)=>{
-        var json={}
+    this.set=(array)=>{
 
         $http({
             method: 'POST',
             url: './lists/create'
         }).then(function successCallback(response) {
-            json.title=name
-            json.code=makeid(10)
-            this.content.push(new this.list(json,array))
+            var json={}
+            json.title=response.data.todo.name
+            json.code=response.data.todo.code
+            json.content_size=0
+
+            //using function
+            var c=new list(json)
+            array.push(c)
+            
             }, function errorCallback(response) {
-
-            });
-
+                console.log(array)
         
-    }
-    // get all todo info
-    this.getall=()=>{
-        return this.content;
-    }
-
-    //single todo info
-    this.getindividual=(code)=>
-    {
-          var found=false;
-            this.content.forEach(element => {
-                if(element.url==code)
-                {
-                    found=element
-                }
             });
-          return found
-    }
-
+        }
     //remove a todo
-    this.remove=(code)=>{
+    this.remove=(code,ownservice)=>{
         var found=false;
-        
-        this.content.forEach((element,index) => {
 
-            if(element.url==code)
-            {
-                found=index;
-            }
-        });
-        this.content.splice(found, 1)
-        return true
-       
+        $rootScope.lists.forEach((element,index) => {
+                if(element.url_code==code)
+                {
+                    found=index;
+                }
+        });            
+
+        
+        if(found !== false){
+
+        $http({
+            method: 'POST',
+            url: `./lists/delete/${code}`
+        }).then(function successCallback(response) {
+
+            $rootScope.lists.splice(found, 1)
+            ownservice.get_first()
+                
+            }, function errorCallback(response) {
+                
+            });
+
+        }else
+        {
+            ownservice.get_first()
+        }
     }
+
+    //update todo_name
+    this.update_title=(todo_name,todo_id)=>{
+        
+
+    }
+
+    //lock todo
+    this.locktoggletodo=()=>
+    {
+         
+        // $rootScope.lists.forEach((element,index) => {
+        //     if(element.url_code==todo_id)
+        //     {
+        //         found=index;
+        //     }
+        // });
+
+        // if(found !== false){
+        //     $http({
+        //         method: 'POST',
+        //         url: `./lists/hideopen/${code}`
+        //     }).then(function successCallback(response) {
+                        
+        //         }, function errorCallback(response) {
+                        
+        //         });    
+        // }
+    }
+
+    
+
+
+    //
+
+
 });
 
-// app.constant("CSRF_TOKEN", '{{ csrf_token()}}'); 
+
 
 //Main Controller
 app.controller('mainController',($scope,$rootScope,listService)=>{
 
+    $scope.lists=$rootScope.lists
+
     //Get all List
-    listService.initialize();
+    listService.initialize()
 
-    //create new Class to Store Todo
-    $scope.lists=listService.getall();
-
-
-
-
-    //Adding new todo object
+    // Adding new todo object
     $scope.createtodo=()=>{
-        listService.set('list',new Array())
+        listService.set($scope.lists)
     }
 
 });

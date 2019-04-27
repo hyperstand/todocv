@@ -1,14 +1,32 @@
 <?php
 
 use App\todo;
+use App\todocontent;
+use App\tools\generate as g;
 use Faker\Generator as Faker;
 
-$factory->define(todo::class, function (Faker $faker) {
+$factory->define(todo::class, function () {
+    $code=new g();
+    $code=$code->gen_id();
     return [
        'name' => 'todo',
-       'code' => substr(md5(uniqid(rand(), true)),0,9),
-       'hide' => $faker->numberBetween($min = 0, $max = 1)
+       'code' => $code,
+       'hide' => 0
    ];
 });
+
+$factory->define(todocontent::class, function (Faker $faker) {
+    
+
+   $valu=[
+    'value' => '',
+    'finish' => $faker->boolean($chanceOfGettingTrue = 50)
+    ];
+    
+    return $valu;
+});
+
+
+
 
 

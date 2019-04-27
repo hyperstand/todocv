@@ -12,3 +12,8 @@
         <button  class="btn-primary">Sign In</button>
     </form>
 @endsection 
+
+@section('javascript')
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+ @endsection

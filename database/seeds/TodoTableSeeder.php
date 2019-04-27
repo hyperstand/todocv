@@ -1,6 +1,7 @@
 <?php
 
 use App\todo;
+use App\todocontent;
 use Illuminate\Database\Seeder;
 
 
@@ -14,15 +15,17 @@ class TodoTableSeeder extends Seeder
     public function run()
     {
         $count = (int)$this->command->ask('How many Todo do you need ?', 10);
-
         $this->command->info("Creating {$count} todo.");
-        factory(App\todo::class, $count)->create()->each(function($u) {
-            
-            // $u->save(factory(App\todo::class)->make());
-            factory(App\todo::class)->make();
-            //['name' =>$gen['name']]
+        $this->command->info("5 content each ");
+
+        //https://www.neontsunami.com/posts/building-relations-with-laravel-model-factories
+        factory(todo::class, $count)->create()->each(function($todo_title) {
+            // factory(App\todo::class)->make();
+            $todo_title->mytodo()->saveMany(
+                factory(todocontent::class, 5)->make()
+            );
         });
-        
+        $this->command->info("Todo Created");
     }
 
     // source

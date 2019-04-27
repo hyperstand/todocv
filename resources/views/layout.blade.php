@@ -33,8 +33,8 @@
                      </li>
                      <span ng-repeat="data in lists">
                         <li class="list">
-                                <a ng-href="lists/[[data.url]]">[[data.name]]</a>
-                                <p>[[data.contentsize]]</p>
+                                <a ng-href="./#!lists/[[data.url_code]]">[[data.title]]</a>
+                                <p>[[data.content_size]]</p>
                         </li>
                     </span>
                  </ul>

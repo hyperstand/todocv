@@ -14,15 +14,14 @@ class CreateTodoTable extends Migration
     public function up()
     {
         Schema::create('todo', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('name');
             $table->string('code');
-
-            // $table->string('user_id_hide');
-            
+            $table->integer('user_hide_id')->unsigned()->index()->nullable();
             $table->boolean('hide');
             $table->timestamps();
-            // $table->foreign('todo_id')->references('id')->on('todo');
+            $table->foreign('user_hide_id')->references('id')->on('users');
+
         });
     }
 

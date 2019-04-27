@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+
 class CreateTodocontentTable extends Migration
 {
     /**
@@ -14,12 +15,12 @@ class CreateTodocontentTable extends Migration
     public function up()
     {
         Schema::create('todocontent', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('todo_id')->unsigned()->index()->nullable();
+            $table->increments('id');
             $table->string('value');
             $table->boolean('finish');
+            $table->integer('todo_id')->unsigned()->index()->nullable();
             $table->timestamps();
-            $table->foreign('todo_id')->references('id')->on('todo');
+            $table->foreign('todo_id')->references('id')->on('todo')->onDelete('cascade');
         });
     }
 
