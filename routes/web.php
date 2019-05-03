@@ -12,9 +12,6 @@
 */
 
 Route::get('/',['uses' => 'mainController@main_view','name'=>'index']);
-Route::get('/login',['uses' => 'mainController@login_view','name'=>'login']);
-Route::get('/register',['uses' => 'mainController@register_view','name'=>'register']);
-
 
 //api
 
@@ -36,6 +33,9 @@ Route::post('/task/rename/content/{id}',['uses' => 'listscontentController@updat
 Route::post('/task/hideopen/content/{id}',['uses' => 'listscontentController@hide_toggle_task','no_csrf_check' => true]);
 Route::post('/task/delete/content/{id}',['uses' => 'listscontentController@delete_content_todo','no_csrf_check' => true]);
 
+//auth
+Route::post('/login',['uses' => 'Auth\LoginController@validate','no_csrf_check' => true]);
+Route::post('/register',['uses' => 'Auth\RegisterController@validate','no_csrf_check' => true]);
 
 
 

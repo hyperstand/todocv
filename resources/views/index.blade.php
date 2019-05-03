@@ -13,9 +13,6 @@
 
  @section('javascript')
  <script src="js/main.js"></script>
- 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-
  @endsection 
 
 

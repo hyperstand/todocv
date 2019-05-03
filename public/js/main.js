@@ -1,19 +1,3 @@
-
-
-app.config(function($routeProvider) {
-    $routeProvider
-    .when("/lists/:id", {
-      templateUrl : "./template/todo.template.html",
-      controller:'todoController'
-    }).otherwise({
-        resolve:{
-            load:['listService','$location',function(listService,$location){
-                listService.get_first($location)       
-            }]
-        }
-    });
-});
-
 app.controller('todoController', function($scope,$routeParams,listService,$http,$timeout,$rootScope) {
     //still developing
 

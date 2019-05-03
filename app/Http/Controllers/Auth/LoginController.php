@@ -34,6 +34,21 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        // $this->middleware('guest')->except('logout');
+    }
+    public function validate(Request $request)
+    {   
+        // $data=['email'=>$request->get('data.email'),'password' =>$request->get('data.password')];
+
+        // if (Auth::attempt($data))
+        // {
+        //     return response()->json(array(),200);
+        // }else
+        // {
+        //     return response()->json(array(),500);
+        // }
+            return $this->guard()->attempt(
+                $this->credentials($request)
+            );
     }
 }

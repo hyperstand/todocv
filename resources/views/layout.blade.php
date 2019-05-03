@@ -14,8 +14,8 @@
         <div class="side_nav" ng-controller="mainController">
                 {{-- head --}}        
                 @guest
-                    <a href="register">sign up</a>
-                    <a href="login">login</a>
+                    <a href="#!/register">sign up</a>
+                    <a href="#!/login">login</a>
                 @endguest
         
                 @auth
@@ -44,9 +44,7 @@
 
     @yield('display')    
 </body>
-
-
-
 <script src="js/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
 <script src="js/app.js"></script>
 @yield('javascript')

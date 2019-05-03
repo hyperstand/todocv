@@ -13,7 +13,30 @@ var app = angular.module('myApp', ["ngRoute"],function($interpolateProvider) {
 // app.constant("CSRF_TOKEN", '{{ csrf_token()}}'); 
 app.run(($rootScope)=>{
     $rootScope.lists=[];
-})
+});
+
+app.config(function($routeProvider) {
+    $routeProvider
+    .when("/lists/:id", {
+        templateUrl : "./template/todo.template.html",
+        controller:'todoController'
+      })
+      .when("/login", {
+        templateUrl : "./template/login.template.html",
+        controller:'loginController'
+      })
+      .when("/register", {
+        templateUrl : "./template/register.template.html",
+        controller:'registerController'
+      })
+    .otherwise({
+        resolve:{
+            load:['listService','$location',function(listService,$location){
+                listService.get_first($location)       
+            }]
+        }
+    });
+});
 app.service('listService', function($http,$rootScope,$location) {
 
     //with function as template
@@ -184,6 +207,48 @@ app.service('listService', function($http,$rootScope,$location) {
 });
 
 
+//Login Controller
+app.controller('loginController', function($scope,$http) {
+
+    $scope.error={
+        val:false,
+        auth:false,
+        syntax:false
+    }
+    $scope.data={
+        email:'',
+        password:''
+    }
+
+    $scope.login=()=>{
+      $scope.error.val=false
+      $scope.error.auth=false  
+      $scope.error.syntax=false
+      var email=$scope.data.email|| "A"
+      var pass=$scope.data.password  
+      var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      console.log(email,pass)
+
+     if(pass.length == 0  || email.length ==0 )
+     {
+        $scope.error.val=true
+     }else if(re.test(email) == false) 
+     {
+        $scope.error.syntax=true
+     }else
+     {
+        $http({
+            method: 'POST',
+            url: `./lists/get/${$routeParams.id}`
+        }).then((response)=>{
+            
+        },()=>{
+            $scope.error.auth=true
+        });
+     }
+    }
+});
 
 //Main Controller
 app.controller('mainController',($scope,$rootScope,listService)=>{
